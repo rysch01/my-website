@@ -6,7 +6,7 @@
 <style>
 @charset "utf-8";
 /* CSS Document */
- 
+
 :root {
   --button-color: #4BB9B9;
   --button-shadow: #3D8787;
@@ -503,6 +503,7 @@ button[class=side]:hover {
 </head>
 	
 	
+	
 <body>
 <div id="all">
 <div id = "side-pane">	
@@ -522,6 +523,7 @@ button[class=side]:hover {
 <div id = "options-pane">
 	 <button type="print" class = "side" onclick="printmode()">Print</button> <button type="import" class = "side">Import</button> <button type="export" class = "side">Export</button> <button type="settings" class = "side">Settings</button>
 	<button id="dark-light" onclick="darklight()" class = "side">Light Mode</button>
+	<input type = "checkbox" onclick="togglecookies()">Toggle Cookies</input>
 </div>
 	
 
@@ -584,7 +586,6 @@ button[class=side]:hover {
 <div id = "nothingHere">Nothing's Here!</div>	
 	
 </body>
-
 <script>
 // JavaScript Document
 
@@ -605,10 +606,15 @@ let root = document.documentElement;
 var toDoList = []; ;
 
 var cookiesOn = true;
+
+function togglecookies() {
+	cookiesOn = !cookiesOn;
+}
+
 var importList;
 importToDo();
 
-if(importList != ""){
+if(importList != "" && cookiesOn){
 	toDoList = importList;
 }
 
@@ -635,7 +641,9 @@ var ascendDuration = false;
 updateHTML();
 
 function exportToDo(){
-	if(cookiesOn){localStorage.setItem('storedList', JSON.stringify(toDoList));}
+	if(cookiesOn)
+	{localStorage.setItem('storedList', JSON.stringify(toDoList));
+	}
 	
 	//alert("out");
 
@@ -644,7 +652,7 @@ function exportToDo(){
 function importToDo(){
 	//alert("in");
 	//alert(localStorage.getItem('storedList'));
-	//if(cookiesOn)
+	if(cookiesOn)
 	{
 		importList = JSON.parse(localStorage.getItem('storedList'));
 	}
