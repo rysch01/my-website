@@ -6,7 +6,7 @@
 <style>
 @charset "utf-8";
 /* CSS Document */
- 
+
 :root {
   --button-color: #4BB9B9;
   --button-shadow: #3D8787;
@@ -598,16 +598,23 @@ button[class=side]:hover {
 // Change Settings to About
 // Make Moveable? Or no?
 // Make Pretty
+// cookies on or off plus message
 
 
 let root = document.documentElement;
-var toDoList;
+var toDoList = []; ;
 
+var cookiesOn = true;
+var importList;
 importToDo();
 
-if(toDoList == null) {
-	toDoList = [];
+if(importList != ""){
+	toDoList = importList;
 }
+
+//if(importList != null) {
+	
+//
 
 
 var ascendCourse = false;
@@ -628,7 +635,8 @@ var ascendDuration = false;
 updateHTML();
 
 function exportToDo(){
-	localStorage.setItem('storedList', JSON.stringify(toDoList));
+	if(cookiesOn){localStorage.setItem('storedList', JSON.stringify(toDoList));}
+	
 	//alert("out");
 
 } 
@@ -636,8 +644,11 @@ function exportToDo(){
 function importToDo(){
 	//alert("in");
 	//alert(localStorage.getItem('storedList'));
-
-	toDoList = JSON.parse(localStorage.getItem('storedList'));
+	//if(cookiesOn)
+	{
+		importList = JSON.parse(localStorage.getItem('storedList'));
+	}
+	
 	updateHTML();
 }
 
@@ -1087,5 +1098,6 @@ function darklight(){
 	}
 	
 	
-}</script>
+}
+</script>
 </html>
