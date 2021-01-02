@@ -24,7 +24,9 @@
   --content-inset: black;
   --item-color: #353535;
   --key-color: #1F1F1F;
-  --key-color-two: #0f0f0f; 
+  --key-color-two: #0f0f0f;
+  --dim-letters: #5f5f5f;
+  --dim-background:#0f0f0f;
 
   --time-color: #D9D9D9;
 }
@@ -241,18 +243,21 @@ body{
 	height: 50px;
 	margin: 5px 0px 5px 0px;
 	box-shadow: 0px 0px 6px rgba(0,0,0,0.25);
-	
 }
 
 .item-block{
-	
+	top: 30%;
+	color: #D9D9D9;
+	font-family: "Cera PROModern Medium";
+	display: inline-block;
+	color: var(--time-color);
 	position: relative;
 	width: 90%;
 	left: 5%;
 	background: var(--item-color);
 	height: 50px;
 	margin: 5px 0px 5px 0px;
-	box-shadow: 0px 0px 6px rgba(0,0,0,0.25); 
+	box-shadow: 0px 0px 6px rgba(0,0,0,0.25);
 }
 
 #check-block{
@@ -262,7 +267,6 @@ body{
 
 
 .item-check {
-		color: var(--time-color);
 
 	display: inline-block;
 	
@@ -281,7 +285,6 @@ body{
 }
 
 .item-course{
-	color: var(--time-color);
 	position: relative;
 	display: inline;
 	width: 20%;
@@ -308,7 +311,6 @@ body{
 
 .item-assignment{
 	width: 40%;
-	color: var(--time-color);
 	overflow: scroll;
 	position: relative;
 	display: inline;
@@ -329,7 +331,6 @@ body{
 }
 
 .item-due{
-	color: var(--time-color);
 	overflow: scroll;
 	display: inline;
 	position: relative;
@@ -350,18 +351,43 @@ body{
 
 .item-duration{
 	display: inline;
-	color: var(--time-color);
 	overflow: scroll;
 	position: relative
 
 }
 
 .trash {
+	width: 2vw;
+	height: 2vw;
 	display: inline;
 	top: 5%;
 	position: relative;
-	right: 5%;
+	color: white;
+	font-size: 100%;
+	background: var(--button-color);
+	border: none;
 }
+
+.trash:hover {
+	background: var(--button-shadow);
+}
+
+.edit {
+	width: 2vw;
+	height: 2vw;
+	display: inline;
+	top: 5%;
+	position: relative;
+	color: white;
+	font-size: 100%;
+	background: var(--button-color);
+	border: none;
+}
+
+.edit:hover {
+	background: var(--button-shadow);
+}
+
 
 
 .vertical-line {
@@ -478,13 +504,34 @@ input::-webkit-outer-spin-button {
 	z-index: 6;
 }
 
+button[class=sidebig] {
+  	background-color:var(--button-color);
+	box-shadow: 5px 0px 0px var(--button-shadow);
+	border: none;
+	font-family: "Cera PROModern Medium";
+	color: white;
+	height: 6vh;
+	width: 89%;
+	position: relative;
+	left: 2%;
+	text-align: center;	
+	margin: 2px;
+}
+
+
+button[class=sidebig]:hover {
+	color: white;
+  	background-color:var(--button-shadow);
+}
+
+
 button[class=side] {
   	background-color:var(--button-color);
 	box-shadow: 5px 0px 0px var(--button-shadow);
 	border: none;
 	font-family: "Cera PROModern Medium";
 	color: white;
-	height: 50px;
+	height: 4vh;
 	width: 89%;
 	position: relative;
 	left: 2%;
@@ -515,15 +562,18 @@ button[class=side]:hover {
 		<input type="number" id="hours" name="hours" value="0" min = "0">hours 
 		<input type="number" id="minutes" value="30" step = "5" min = "0" max = "60" onchange="modulo()">min</div>
 	 	<input type="date" id="date" name="date" min="2020-01-01"><br>
-		<button class = "side" onclick="addTask()">Add Task</button>
+		<button class = "sidebig" onclick="addTask()">Add Task</button>
 
 		
 </div>	
 	
 <div id = "options-pane">
-	 <button type="print" class = "side" onclick="printmode()">Print</button> <button type="import" class = "side">Import</button> <button type="export" class = "side">Export</button> <button type="settings" class = "side">Settings</button>
+	 <button type="print" class = "side" onclick="printmode()">Print</button> <button type="import" class = "side" onclick="importDoc()">Import JSON</button> <button type="export" class = "side" onclick="exportDoc()">Export JSON</button>
 	<button id="dark-light" onclick="darklight()" class = "side">Light Mode</button>
-	<input type = "checkbox" onclick="togglecookies()">Toggle Cookies</input>
+	<button id="clear" onclick="clearList()" class = "side">Clear List</button>
+	<button class="side" id = "cookiebox" onclick="togglecookies()"> Toggle Cookies</button>
+	 <button type="settings" class = "side">About</button>
+	 <button type="settings" class = "side">Return to Site</button>
 </div>
 	
 
@@ -546,7 +596,7 @@ button[class=side]:hover {
 		<div  class = "key-header" id="check-block"> 
 			<!--<button id="visibility">
 				<div id = "eye">👁</div></button>-->
-		<input type = "checkbox" id = "show-completed" onclick="updateHTML()"></input>
+		<input type = "checkbox" id = "show-completed" onclick="toggleShowComplete()"></input>
 		<div class="vertical-line"></div>
 		</div>
 		
@@ -586,6 +636,7 @@ button[class=side]:hover {
 <div id = "nothingHere">Nothing's Here!</div>	
 	
 </body>
+
 <script>
 // JavaScript Document
 
@@ -593,7 +644,7 @@ button[class=side]:hover {
 // Load Colors Prior to Loading Page
 // Fix colors in Print Mode
 
-// Swap import and export for clear and in/out
+// Swap import and export for clear and in/out docs
 
 // Filter Completed
 // Change Settings to About
@@ -609,6 +660,15 @@ var cookiesOn = true;
 
 function togglecookies() {
 	cookiesOn = !cookiesOn;
+	if(!cookiesOn)
+	{		
+
+	document.getElementById("cookiebox").style.setProperty("background", "var(--button-shadow)");
+	} 
+	else{
+		document.getElementById("cookiebox").style.setProperty("background", "var(--button-color)");
+	}
+	
 }
 
 var importList;
@@ -627,6 +687,14 @@ var ascendCourse = false;
 var ascendAssn = false;
 var ascendDue = false;
 var ascendDuration = false;
+
+var showComplete = false;
+
+function toggleShowComplete(){
+	showComplete = !showComplete;
+	//alert(showComplete);
+	updateHTML();
+}
 
 
 //var assn1 = new ToDoItem("Comp410", "Dijkstra",  "12",  "30", "2020-11-21");
@@ -649,6 +717,17 @@ function exportToDo(){
 
 } 
 
+function clearList(){
+	toDoList =[];
+	updateHTML();
+}
+
+
+function exportDoc(){
+	window.prompt("Copy the following and save to a doc:",JSON.stringify(toDoList));
+
+}
+
 function importToDo(){
 	//alert("in");
 	//alert(localStorage.getItem('storedList'));
@@ -660,6 +739,18 @@ function importToDo(){
 	updateHTML();
 }
 
+function importDoc(){
+	 try {
+		JSON.parse(window.prompt("Paste the saved JSON list",""));
+		updateHTML();
+	} catch (e) {
+		alert("invalid input");
+		return;
+    }
+	
+	toDoList = JSON.parse(window.prompt("Paste the saved JSON list",""));
+	updateHTML();
+}
 
 function SortByCourseName(){
 	toDoList.sort(function(a, b) {
@@ -816,6 +907,12 @@ function SortByDuration(){
 
 // add unique id's to each
 
+
+function togglecheck(index){
+	toDoList[index].checked = !toDoList[index].checked;
+	updateHTML();
+}
+
 function updateHTML() {
 
 	var html = "";
@@ -833,14 +930,25 @@ function updateHTML() {
 		   
 		   
 		   
-		   
-		html +=  '<div class = "item-block" id="itemNum '+ item.index +'">' +
-			'<div class = "key-header">' +
-			item.index +
+		if(!(item.checked && showComplete)){
+			
+		if(item.checked){
+			html +=  '<div class = "item-block" id="itemNum '+ item.index +'" style="color:var(--dim-letters); background:var(--dim-background); font-decoration:line-through;" onclick="togglecheck('+item.index+'")>';
+			
 
-			'<input type = "checkbox" id = id="checkNum '+ item.index +'"/input>'+
+		}
+		else{	
+		html +=  '<div class = "item-block" id="itemNum '+ item.index +'" onclick="togglecheck('+item.index+'")>';
+		}
+			
+		if(item.checked){
+			html += '<input type = "checkbox" checked onclick="togglecheck('+item.index+')"></input>'
+		} else {
+			html += '<input type = "checkbox" onclick="togglecheck('+item.index+')"></input>'
+		}
 
-
+		
+		html+=
 			'<div class = "item-course">' +
 			item.course + 
 			' </div>'+
@@ -863,15 +971,15 @@ function updateHTML() {
 			item.hours + ' hours ' + item.minutes + ' minutes'+ 
 			' </div>'+
 			
-			'<button class = "edit" id = "eit' +item.index + '" onclick = "editItem('+item.index+')"> Edit ' + item.index + ' </button>'+
+			'<button class = "edit" id = "edit' +item.index + '" onclick = "editItem('+item.index+')">✎</button>'+
 			
-			'<button class = "trash" id = "del' +item.index + '" onclick = "deleteItem('+item.index+')"> Delete ' + item.index + ' </button>'+
+			'<button class = "trash" id = "del' +item.index + '" onclick = "deleteItem('+item.index+')">🗑</button>'+
 			
 			
-			'</div>'+
+
 
 			'</div>';
-		  // }
+		  }
 	});
 
 	// Log and inject
@@ -931,7 +1039,6 @@ function addTask() {
 function ToDoItem(crsName, assnName, hrs, min, dte) {
 	//alert("here");
 	this.checked = false;
-	this.deleted = false;
 	
 	this.course = crsName;
 	this.assignment = assnName; 
@@ -1076,6 +1183,9 @@ function darklight(){
 		root.style.setProperty('--key-color', "#c1272d");
 		root.style.setProperty('--key-color', "maroon");
 		root.style.setProperty('--time-color', "black");
+
+		root.style.setProperty('--dim-letters', "#D49A9D");
+		root.style.setProperty('--dim-background',"#A63A3E");
 		
 		darkLightPersist = "light";
 		localStorage.setItem("darkLightKey", darkLightPersist);
@@ -1099,7 +1209,10 @@ function darklight(){
 		root.style.setProperty('--content-inset', "black");
 		root.style.setProperty('--item-color', "#353535");
 		root.style.setProperty('--key-color', "#1F1F1F");
-		root.style.setProperty('--time-color', "#D9D9D9");
+		root.style.setProperty('--time-color',"#D9D9D9");
+		root.style.setProperty('--dim-letters', "#5f5f5f");
+		root.style.setProperty('--dim-background',"#0f0f0f");
+		
 		
 		darkLightPersist = "dark";
 		localStorage.setItem("darkLightKey", darkLightPersist);
