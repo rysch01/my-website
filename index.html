@@ -628,7 +628,7 @@ var ascendDuration = false;
 updateHTML();
 
 function exportToDo(){
-	localStorage.setItem('storedList', JSON.stringify(toDoList));
+	//localStorage.setItem('storedList', JSON.stringify(toDoList));
 	//alert("out");
 
 } 
@@ -637,7 +637,7 @@ function importToDo(){
 	//alert("in");
 	//alert(localStorage.getItem('storedList'));
 
-	toDoList = JSON.parse(localStorage.getItem('storedList'));
+	//toDoList = JSON.parse(localStorage.getItem('storedList'));
 	updateHTML();
 }
 
